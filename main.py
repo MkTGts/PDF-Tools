@@ -22,16 +22,23 @@ logging.basicConfig(
 
 
 
-class PDFSpliter:
-    def __init__(self, input_file, mode="all"):
-        self.input_file = input_file.lower()
-        self.res_path = f'разделение/{self.input_file.strip(".pdf")}'
-        self.mode = mode  # добавляю на случай если решу дописать другие способы разделения
+class OSTools:
+    def __init__(self):
+        pass
 
 
     def _make_dir(self):
         # создание директории под разделенные файлы
-        os.makedirs(self.res_path)
+        os.makedirs(self.res_path)   
+
+
+
+class PDFSpliter(OSTools):
+    def __init__(self, input_file, mode="all", del_orig_file=False):
+        self.input_file = input_file.lower()
+        self.res_path = f'разделение/{self.input_file.strip(".pdf")}'
+        self.mode = mode  # добавляю на случай если решу дописать другие способы разделения
+        self.del_orig_file = del_orig_file
 
 
     def split_pdf_all(self):
@@ -60,8 +67,58 @@ class PDFSpliter:
         if self.mode == "all":  # если выбран мод все страницы постранично
             self.split_pdf_all()
 
+
+class PDFMerger(OSTools):
+    def __init__(self, input_dir, mode="sort"):
+        self.input_dir = input_dir
+        self.res_path = f'склейка'
+        self.mode = mode
+
+
+    def get_filelist(self):
+        self.filelist = [f for f in os.listdir(self.input_dir) if f.lower().endswith(".pdf")]
+        
+
+
+    def merge_pdf(self):
+        pass
     
-prog = PDFSpliter(input_file="Устав.pdf")
-prog()
+
+    def __call__(self, *args, **kwds):
+        self._make_dir()
+
+    
+    
+class App:
+    name_ = "PDF-Tools"
+    ver = "0.0.1"
+
+    def __init__(self):
+        self.root = tkinter.Tk()  # инициализация окна
+        self.root.title(f"{__class__.name_} | {__class__.ver}")  # заголовок
+        self.root.geometry("450x580+650+180")  # размер окна
+    
+    def __call__(self, *args, **kwds):
+        self.root.mainloop()
+
+
+def main():
+    app = App()
+    app()
+
+
+if __name__ == "__main__":
+    #main()
+    pass
+
+
+
+
+
+
+
+
+    
+
 
 
